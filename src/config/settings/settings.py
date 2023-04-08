@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # third party
     # firts party
-    "imageprocessing.apps.config",
+    "imageprocessing.apps.ImageprocessingConfig",
 ]
 
 MIDDLEWARE = [
@@ -118,8 +118,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_ROOT = BASE_DIR("runtime", "static")
-STATIC_URL = 'static/'
+#STATIC_ROOT = BASE_DIR("runtime", "static")
+STATIC_URL = '/static/'
 STATICFILES_STORAGE = (
     "django.contrib.staticfiles.storage.StaticFilesStorage"
 )
