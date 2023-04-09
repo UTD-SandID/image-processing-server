@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # first party
     'image_processing.apps.ImageProcessingConfig',
     'image_processing_api.apps.ImageProcessingApiConfig',
+    'utils.apps.UtilsConfig'
 
 ]
 

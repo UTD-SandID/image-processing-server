@@ -1,4 +1,4 @@
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,8 +15,8 @@ class SandImageUploadView(APIView):
         if serializer.is_valid():
             image = serializer.validated_data['image']
 
-            # Run image processing on image
-            
+            # Run image processing on image here
+
             return Response({'message': 'Image recieved'})
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
