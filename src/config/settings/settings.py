@@ -38,8 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # third party
-    # firts party
-    "imageprocessing.apps.ImageprocessingConfig",
+    'rest_framework',
+    # first party
+    'image_processing.apps.ImageProcessingConfig',
+    'image_processing_api.apps.ImageProcessingApiConfig',
+
 ]
 
 MIDDLEWARE = [
