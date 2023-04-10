@@ -1,2 +1,5 @@
 Django==4.2
 djangorestframework==3.14.0
+matplotlib==3.7.1
+imutils>=0.5.4
+scipy==1.10.1
