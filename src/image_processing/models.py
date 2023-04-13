@@ -5,6 +5,7 @@ class SandImage(models.Model):
     user_id = models.IntegerField()
     coin_type = models.CharField(max_length=20)
     image = models.ImageField(max_length=None)
+    #ready = models.BooleanField(default=False)
 
 
 class CoinTypes(models.Model):

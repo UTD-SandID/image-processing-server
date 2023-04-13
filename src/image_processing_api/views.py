@@ -18,9 +18,9 @@ class SandImageUploadView(APIView):
             serializer.save()
             image = serializer.validated_data['image']
 
-            #var = getRescaleFactor('C:/Users/trent/OneDrive/Documents/GitHub/image-processing-server/input images/bwnhd.jpg', 0.835, 0.04)
+            var = getRescaleFactor('C:/Users/trent/OneDrive/Documents/GitHub/image-processing-server/input images/IMG_3837.jpg', 0.955)
 
-            return Response({'message': 'success'})
+            return Response({'message': var})
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

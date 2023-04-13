@@ -25,60 +25,59 @@ def rmbgJPG(path):
     rgb_im.save("result.jpg")
     return "result.jpg"
 
-def getRescaleFactor(imgPath, coinLength, coinError):
+def getRescaleFactor(imgPath, coinLength):
     irlLength = coinLength #diameter of physical coin
-    lengthErr = coinError #margin of error in diameters of ellipse before Bad Image Error
-    #path = "bwnhd.jpg"
-    #path = "bao_emb.jpg"
-    #path = "wao_100.jpg"
-    #path = "brgr.jpg"
+    lengthErr = .05 #margin of error in diameters of ellipse before Bad Image Error
     path = imgPath
 
-    #img
+    img = cv2.imread(path)
 
-    img = cv2.imread(path)  # converts to numpy array
-    #print(img.shape)
+    h, w, c = img.shape
+    if h < w:
+        img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
 
     bgr = cv2.imread(rmbgJPG(path))
-    #plt.imshow(bgr)
+
+    h, w, c = bgr.shape
+    if h < w:
+        bgr = cv2.rotate(bgr, cv2.ROTATE_90_CLOCKWISE)
 
     h, w, c = bgr.shape
     maxD = max(h, w)
-    #print("MaxDimension: ", maxD)
+
     ratio = math.ceil(maxD / 250)
     if ratio % 2 == 0:
         ratio = ratio + 1
-    print("Frame Size Ratio:" , ratio)
+
     gr = cv2.cvtColor(bgr, cv2.COLOR_RGB2GRAY)
     #gr = cv2.GaussianBlur(gr, (ratio, ratio), 0)
     #gr = cv2.medianBlur(gr,ratio)
     #gr = cv2.blur(gr,(ratio,ratio))
     gr = cv2.bilateralFilter(gr,ratio,75,75)
 
-    # showing image
-
     edge = cv2.Canny(gr, 50, 100, apertureSize = 7)
-
-    edge = cv2.dilate(edge, None, iterations=10)
-
-    edge = cv2.erode(edge, None, iterations=10)
+    edge = cv2.dilate(edge, None, iterations=20)
+    edge = cv2.erode(edge, None, iterations=20)
 
     # find contours in the edge map
-    cnts = cv2.findContours(edge.copy(), cv2.RETR_EXTERNAL,
-        cv2.CHAIN_APPROX_SIMPLE)
+    cnts = cv2.findContours(edge.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cnts = imutils.grab_contours(cnts)
+
 
     # sort the contours from left-to-right and initialize the
     # 'pixels per metric' calibration variable
     (cnts, _) = contours.sort_contours(cnts)
     pixelsPerMetric = None
     avgD = 0
+    scaledDimX = None
+    scaledDimY = None
 
     # loop over the contours individually
     orig = img.copy()
+    coinFlag = True
     for c in cnts:
         # anything less than a 100px considered noise
-        if cv2.contourArea(c) < 750:
+        if cv2.contourArea(c) < 100:
             continue
         #print(cv2.contourArea(c))
         box = cv2.minAreaRect(c)
@@ -114,28 +113,35 @@ def getRescaleFactor(imgPath, coinLength, coinError):
         if pixelsPerMetric is None:
             #print(avgD, " <- DB | ppm ->  ", pixelsPerMetric)
             pixelsPerMetric = avgD / irlLength
-        print("PPM: ", pixelsPerMetric)
-        if (min(dA, dB) * (1 + lengthErr)) < (max(dA, dB)):
-            print(dA, " | ", dB, " + ", lengthErr)
-            print("Coin proportions flawed.")
-            return 0
-        else:
-            print(dA, " | ", dB, " + ", lengthErr)
+        if scaledDimX is None:
+            ppmDiff = 750 / pixelsPerMetric
+            #print(ppmDiff)
+            if ppmDiff > 1:
+                #print("Image too zoomed out.")
+                return "Image needs to be taken from closer"
+            scaledDimX = math.ceil(w * ppmDiff)
+            scaledDimY = math.ceil(h * ppmDiff)
+        #print("PPM: ", pixelsPerMetric)
+        if (min(dA, dB) * (1+lengthErr)) < (max(dA, dB)) and coinFlag is True:
+            coinFlag = False
+            return "Object was not detected properly / no coin in frame"
+            #exit(0)
         # compute the size of the object
         dimA = dA / pixelsPerMetric
-        print("A Dimension: ", dimA)
+        #print(dA, " | ", dimA)
         dimB = dB / pixelsPerMetric
-        print("A Dimension: ", dimB)
+        #print(dB, " | ", dimB)
         
         # draw the object sizes on the image
         cv2.putText(orig, "{:.3f}in".format(dimA),
             (int(tltrX - 150), int(tltrY - 100)), cv2.FONT_HERSHEY_SIMPLEX, math.ceil(maxD * .0015), (255, 255, 255), ratio)
         cv2.putText(orig, "{:.3f}in".format(dimB),
             (int(trbrX + 100), int(trbrY)), cv2.FONT_HERSHEY_SIMPLEX, math.ceil(maxD * .0015), (255, 255, 255), ratio)
-        
-        #head, tail = os.path.split(path)
-        #print(head, " h<>t ", "tail")
-        #cv2.imwrite(head + tail[:-4] + "_" + str(round(pixelsPerMetric, 1)) + ".jpg",orig)
-        cv2.imwrite(path,orig)
-        #cv2.imwrite(head + tail[:-4] + "$" + str(round(pixelsPerMetric, 1)) + ".jpg",img)
-        return pixelsPerMetric
+    
+    dim = (scaledDimX, scaledDimY)
+    #print(dim)
+    resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+
+
+    cv2.imwrite(path,resized)
+    return 0
