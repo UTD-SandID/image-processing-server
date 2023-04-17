@@ -26,3 +26,8 @@ Use `pip` to install your development dependencies.
 ```console
 python3 -m pip install -r requirements/requirements.txt
 ```
+Celery scheduling
+```
+celery -A src worker --loglevel=INFO
+celery -A src beat --loglevel=INFO
+```

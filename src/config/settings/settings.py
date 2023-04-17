@@ -136,3 +136,11 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Celery scheduling
+CELERY_BEAT_SCHEDULE = {
+    'run-every-5-minutes': {
+        'task': 'myapp.tasks.my_background_task',
+        'schedule': 300.0,  # 5 minutes in seconds
+    },
+}
