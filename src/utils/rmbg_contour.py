@@ -24,8 +24,8 @@ def rmbgJPG(path):
     input = Image.open(input_path)
     output = remove(input)
     rgb_im = output.convert('RGB')
-    img_path = settings.MEDIA_ROOT.temp + 'result.jpg'
-    rgb_im.save(path)
+    img_path = settings.MEDIA_ROOT + str('/temp/result.jpg')
+    rgb_im.save(img_path)
     return img_path
 
 def getRescaleFactor(imgPath, coinLength):

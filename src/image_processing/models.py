@@ -5,4 +5,4 @@ class SandImage(models.Model):
     user_id = models.IntegerField()
     coin_diameter = models.FloatField()
     image = models.ImageField(max_length=None)
-    status = models.IntegerField()
+    status = models.IntegerField(default=0)

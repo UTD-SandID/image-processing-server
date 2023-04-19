@@ -1,3 +1,5 @@
+from django.core import serializers
+
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -17,7 +19,9 @@ class SandImageUploadView(APIView):
         print(request.data)
         serializer = ImageSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            instance = serializer.save()
+            instance_data = serializers.serialize()
+            #process_image_task.delay(instance_data)
             return Response({'message': 'success'})
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
