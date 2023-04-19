@@ -31,7 +31,7 @@ py manage.py runserver
 Use `pip` to install your development dependencies.
 
 ```console
-python3 -m pip install -r requirements/requirements.txt
+py -m pip install -r requirements/requirements.txt
 ```
 Celery scheduling
 ```
