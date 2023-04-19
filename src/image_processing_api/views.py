@@ -6,6 +6,8 @@ from rest_framework import status
 
 from utils.rmbg_contour import getRescaleFactor
 from image_processing_api.serializers import ImageSerializer
+from utils.tasks import check_status
+
 
 class SandImageUploadView(APIView):
     authenticaiton_classes = [SessionAuthentication, TokenAuthentication]
@@ -20,4 +22,3 @@ class SandImageUploadView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        

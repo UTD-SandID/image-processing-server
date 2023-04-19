@@ -14,6 +14,8 @@ import cv2
 import math
 from rembg import remove
 
+from django.conf import settings
+
 def midpoint(pointA, pointB):
     return ((pointA[0] + pointB[0]) * 0.5, (pointA[1] + pointB[1]) * 0.5)
 
@@ -22,8 +24,9 @@ def rmbgJPG(path):
     input = Image.open(input_path)
     output = remove(input)
     rgb_im = output.convert('RGB')
-    rgb_im.save("result.jpg")
-    return "result.jpg"
+    img_path = settings.MEDIA_ROOT.temp + 'result.jpg'
+    rgb_im.save(path)
+    return img_path
 
 def getRescaleFactor(imgPath, coinLength):
     irlLength = coinLength #diameter of physical coin
@@ -118,13 +121,13 @@ def getRescaleFactor(imgPath, coinLength):
             #print(ppmDiff)
             if ppmDiff > 1:
                 #print("Image too zoomed out.")
-                return "Image needs to be taken from closer"
+                return 1, None
             scaledDimX = math.ceil(w * ppmDiff)
             scaledDimY = math.ceil(h * ppmDiff)
         #print("PPM: ", pixelsPerMetric)
-        if (min(dA, dB) * (1+lengthErr)) < (max(dA, dB)) and coinFlag is True:
+        if (min(dA, dB) * (1 + lengthErr)) < (max(dA, dB)) and coinFlag is True:
             coinFlag = False
-            return "Object was not detected properly / no coin in frame"
+            return 2, None
             #exit(0)
         # compute the size of the object
         dimA = dA / pixelsPerMetric
@@ -143,5 +146,5 @@ def getRescaleFactor(imgPath, coinLength):
     resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
 
 
-    cv2.imwrite(path,resized)
-    return 0
+    cv2.imwrite(path, resized)
+    return 0, path
