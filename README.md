@@ -8,6 +8,11 @@ py -m venv env
 ```
 Edit pyconfig in env to use python 3.10
 
+*Note: requirements command here?
+still had to install manually
+-django, djangorestframework, matplotlib, imutils, scipy, celery, opencv-python, rembg, firebase_admin
+*
+
 ```console
 env/Scripts/activate
 cd src
@@ -15,6 +20,7 @@ py manage.py makemigrations
 py manage.py migrate
 py manage.py createsuperuser
 ```
+
 Enter user info
 
 ```console
