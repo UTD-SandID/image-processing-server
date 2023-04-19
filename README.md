@@ -10,7 +10,8 @@ Edit pyconfig in env to use python 3.10
 
 *Note: requirements command here?
 still had to install manually
--django, djangorestframework, matplotlib, imutils, scipy, celery, opencv-python, rembg, firebase_admin
+-django, djangorestframework, matplotlib, imutils, scipy, 
+celery, opencv-python, rembg, firebase_admin
 *
 
 ```console
