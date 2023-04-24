@@ -22,7 +22,8 @@ class SandImageUploadView(APIView):
             instance = serializer.save()
             instance_data = serializers.serialize()
             #process_image_task.delay(instance_data)
-            return Response({'message': 'success'})
+            var = process_image_task(instance_data)
+            return Response({'message': var})
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
