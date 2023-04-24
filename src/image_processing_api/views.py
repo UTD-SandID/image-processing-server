@@ -8,7 +8,7 @@ from rest_framework import status
 
 from utils.rmbg_contour import getRescaleFactor
 from image_processing_api.serializers import ImageSerializer
-from utils.tasks import check_status
+from utils.tasks import check_status, process_image_task
 
 
 class SandImageUploadView(APIView):
