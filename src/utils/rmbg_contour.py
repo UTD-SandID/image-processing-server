@@ -16,13 +16,13 @@ import math
 import sys
 from rembg import remove
 
-#from django.conf import settings
+from django.conf import settings
 
 np.set_printoptions(threshold=sys.maxsize)
 
 def midpoint(pointA, pointB):
     return ((pointA[0] + pointB[0]) * 0.5, (pointA[1] + pointB[1]) * 0.5)
-'''
+
 def rmbgJPG(path):
     input_path = path
     input = Image.open(input_path)
@@ -39,7 +39,7 @@ def rmbgJPG(path):
     rgb_im = output.convert('RGB')
     rgb_im.save("result.jpg")
     return "result.jpg"
-
+'''
 
 def cropBox(x, y, a, b, percent):
     newX = math.floor(x + (a*percent))
