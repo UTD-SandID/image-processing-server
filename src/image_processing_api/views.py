@@ -8,7 +8,7 @@ from rest_framework import status
 
 from utils.rmbg_contour import getRescaleFactor
 from image_processing_api.serializers import ImageSerializer
-from utils.tasks import check_status, process_image_task
+from utils.tasks import process_image
 
 
 class SandImageUploadView(APIView):
@@ -21,9 +21,8 @@ class SandImageUploadView(APIView):
         if serializer.is_valid():
             instance = serializer.save()
             instance_data = serializers.serialize()
-            #process_image_task.delay(instance_data)
-            var = process_image_task(instance_data)
-            return Response({'message': var})
+            process_image_task.delay(instance_data)
+            return Response({'message': 'success'})
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
