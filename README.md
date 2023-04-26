@@ -4,12 +4,12 @@ Server for image processing.
 ### Local Setup
 
 ```console
-py -m venv env
+python3 -m venv env
 ```
 Edit pyconfig in env to use python 3.10
 
 ```console
-py -m pip install -r requirements/requirements.txt
+python3 -m pip install -r requirements/requirements.txt
 ```
 
 still had to install manually
@@ -20,15 +20,15 @@ celery, opencv-python, rembg, firebase_admin
 ```console
 env/Scripts/activate
 cd src
-py manage.py makemigrations
-py manage.py migrate
-py manage.py createsuperuser
+python3 manage.py makemigrations
+python3 manage.py migrate
+python3 manage.py createsuperuser
 ```
 
 Enter user info
 
 ```console
-py manage.py runserver
+python3 manage.py runserver
 ```
 
 Use `pip` to install your development dependencies.
