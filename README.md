@@ -1,8 +1,9 @@
 # image-processing-server
 Server for image processing.
 
-### Local Setup
+### Local Setup (Linux)
 **REQUIRES PYTHON VERSION [3.9, 3.10]**
+Requires redis server
 
 Virtual Environment Setup
 ```console
