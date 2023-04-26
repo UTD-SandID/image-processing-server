@@ -1,8 +1,8 @@
 from django.db import models
 
 class SandImage(models.Model):
-    image_id = models.IntegerField()
-    user_id = models.IntegerField()
-    coin_diameter = models.FloatField()
     image = models.ImageField(max_length=None)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    coin = models.FloatField()
     status = models.IntegerField(default=0)
