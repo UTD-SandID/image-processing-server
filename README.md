@@ -2,11 +2,12 @@
 Server for image processing.
 
 ### Local Setup
+**REQUIRES PYTHON VERSION [3.9, 3.10]**
 
+Virtual Environment Setup
 ```console
 python3 -m venv env
 ```
-Edit pyconfig in env to use python 3.10
 
 ```console
 python3 -m pip install -r requirements/requirements.txt
@@ -35,6 +36,6 @@ Use `pip` to install your development dependencies.
 
 Celery scheduling
 ```
-celery -A src worker --loglevel=INFO
-celery -A src beat --loglevel=INFO
+celery -A config worker --loglevel=INFO
+celery -A config beat --loglevel=INFO
 ```
