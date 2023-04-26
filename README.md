@@ -8,7 +8,10 @@ py -m venv env
 ```
 Edit pyconfig in env to use python 3.10
 
-*Note: requirements command here?
+```console
+py -m pip install -r requirements/requirements.txt
+```
+
 still had to install manually
 -django, djangorestframework, matplotlib, imutils, scipy, 
 celery, opencv-python, rembg, firebase_admin
@@ -30,9 +33,6 @@ py manage.py runserver
 
 Use `pip` to install your development dependencies.
 
-```console
-py -m pip install -r requirements/requirements.txt
-```
 Celery scheduling
 ```
 celery -A src worker --loglevel=INFO
