@@ -1,24 +1,23 @@
 # image-processing-server
 Server for image processing.
 
-### Local Setup
+### Local Setup (Linux)
+**REQUIRES PYTHON VERSION [3.9, 3.10]**
+Requires redis server
 
+Virtual Environment Setup
 ```console
 python3 -m venv env
+. env/Scripts/activate
 ```
-Edit pyconfig in env to use python 3.10
 
+Install dependencies
 ```console
 python3 -m pip install -r requirements/requirements.txt
 ```
 
-still had to install manually
--django, djangorestframework, matplotlib, imutils, scipy, 
-celery, opencv-python, rembg, firebase_admin
-*
-
+Make migrations
 ```console
-env/Scripts/activate
 cd src
 python3 manage.py makemigrations
 python3 manage.py migrate
@@ -35,6 +34,6 @@ Use `pip` to install your development dependencies.
 
 Celery scheduling
 ```
-celery -A src worker --loglevel=INFO
-celery -A src beat --loglevel=INFO
+celery -A config worker --loglevel=INFO
+celery -A config beat --loglevel=INFO
 ```
