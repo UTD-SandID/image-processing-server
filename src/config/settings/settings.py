@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-u)idt&bid%pojf+va@1g!ncj-c)&bn$e+#4-nf4+o!(7%mwna)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['18.191.159.197']
+ALLOWED_HOSTS = ['3.144.134.244 ']
 
 
 # Application definition
@@ -147,6 +147,6 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULE = {
     'run-every-5-minutes': {
         'task': 'myapp.tasks.my_background_task',
-        'schedule': 300.0,  # 5 minutes in seconds
+        'schedule': 60.0,  # 5 minutes in seconds
     },
 }
