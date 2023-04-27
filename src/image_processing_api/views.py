@@ -21,8 +21,7 @@ class SandImageUploadView(APIView):
         serializer = ImageSerializer(data=request.data)
         if serializer.is_valid():
             instance = serializer.save()
-            instance_data = serializer.serialize(instance)
-            process_image.delay(instance_data)
+            process_image.delay(instance)
             #var = process_image_task(instance_data)
             return Response({'message': 'success'})
         else:
