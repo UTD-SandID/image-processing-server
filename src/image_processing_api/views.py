@@ -7,9 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from utils.rmbg_contour import getRescaleFactor
 from image_processing_api.serializers import ImageSerializer
-from utils.tasks import check_status, process_image
+from utils.tasks import process_image
 
 
 class SandImageUploadView(APIView):

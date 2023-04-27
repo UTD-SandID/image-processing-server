@@ -7,7 +7,7 @@ from .firebase_controller import firebase_image_upload
 from .rmbg_contour import getRescaleFactor
 
 def process_image(sender, instance, **kwargs):
-    coin_diameter = instance.coin_diameter
+    coin_diameter = instance.coin
     image_path = str(instance.image.path)
     var, result_path = getRescaleFactor(image_path, coin_diameter)
     if var == 0:
