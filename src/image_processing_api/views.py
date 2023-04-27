@@ -20,9 +20,8 @@ class SandImageUploadView(APIView):
         serializer = ImageSerializer(data=request.data)
         if serializer.is_valid():
             instance = serializer.save()
-            process_image.delay(instance)
-            #var = process_image_task(instance_data)
-            return Response({'message': 'success'})
+            #process_image.apply_async(args=[instance.id]) #Asynchronous task scheduler can't connect
+            return Response({'message': 'Image successfully uploaded to server.'})
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         

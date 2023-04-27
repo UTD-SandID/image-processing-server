@@ -138,6 +138,7 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Celery scheduling
+BROKER_URL = 'redis://localhost:6379/0'
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
@@ -146,7 +147,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_BEAT_SCHEDULE = {
     'run-every-5-minutes': {
-        'task': 'myapp.tasks.my_background_task',
+        'task': 'utils.tasks.batch_upload',
         'schedule': 60.0,  # 5 minutes in seconds
     },
 }
