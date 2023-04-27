@@ -6,7 +6,9 @@ from .error_codes import get_error_message
 from .firebase_controller import firebase_image_upload
 from .rmbg_contour import getRescaleFactor
 
-def process_image(sender, instance, **kwargs):
+@shared_task()
+def process_image(instance_pk):
+    instance = SandImage.objects.get(pk=instance_pk)
     coin_diameter = instance.coin
     image_path = str(instance.image.path)
     var, result_path = getRescaleFactor(image_path, coin_diameter)
@@ -16,9 +18,10 @@ def process_image(sender, instance, **kwargs):
     elif var == 1:
         setattr(instance, 'status', var)
     instance.save()
-    #firebase_image_upload(instance.image.url)
+    firebase_image_upload(instance.image.url)
+    return coin_diameter
 
-@shared_task
+@shared_task()
 def batch_upload():
     entries = SandImage.objects.all()
     for entry in entries:
