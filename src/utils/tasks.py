@@ -13,7 +13,7 @@ def process_image(instance_pk):
     image_path = str(instance.image.path)
     var, result_path = getRescaleFactor(image_path, coin_diameter)
     if var == 0:
-        setattr(instance, 'status', 0)
+        setattr(instance, 'status', 1)
         setattr(instance, 'image', result_path)
     elif var == 1:
         setattr(instance, 'status', var)
@@ -23,11 +23,19 @@ def process_image(instance_pk):
 
 @shared_task()
 def batch_upload():
-    entries = SandImage.objects.all()
+    entries = SandImage.objects.filter(status=1)
     for entry in entries:
         status = getattr(entry, 'status')
-        if status == 0:
+        if status == 1:
             image_path = entry.image.path
             firebase_image_upload(image_path)
-        entry.delete()
     return
+
+#@shared_task()
+#def batch_delete():
+#    entries = SandImage.objects.all()
+#    for entry in entries:
+#        status = getattr(entry, 'status')
+#        if status != 1:
+#            entry.delete()
+#    return

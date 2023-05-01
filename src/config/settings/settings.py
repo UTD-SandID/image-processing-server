@@ -146,7 +146,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_BEAT_SCHEDULE = {
-    'run-every-5-minutes': {
+    'firebase_upload': {
         'task': 'utils.tasks.batch_upload',
         'schedule': 60.0,  # 5 minutes in seconds
     },
