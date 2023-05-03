@@ -7,5 +7,6 @@ class SandImage(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     coin = models.FloatField()
-    status = models.IntegerField(default=0)
+    status = models.CharField(max_length=20, default='Pending')
+    error = models.CharField(max_length=50, default='None')
     

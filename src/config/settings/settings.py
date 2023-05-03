@@ -150,4 +150,8 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'utils.tasks.batch_upload',
         'schedule': 60.0,  # 5 minutes in seconds
     },
+    'process_images': {
+        'task': 'utils.tasks.process_image',
+        'schedule': 10.0,
+    },
 }

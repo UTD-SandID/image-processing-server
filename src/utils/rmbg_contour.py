@@ -180,15 +180,14 @@ def getRescaleFactor(imgPath, coinLength):
                 #print(ppmDiff)
                 if ppmDiff > 1:
                     #print("Image too zoomed out / Resolution too low")
-                    return 1, None
+                    return 'Image too zoomed out / Resolution too low.', None
                     #exit(0)
                 scaledDimX = math.ceil(w * ppmDiff)
                 scaledDimY = math.ceil(h * ppmDiff)
             #print("PPM: ", pixelsPerMetric)
             if (min(dA, dB) * (1+lengthErr)) < (max(dA, dB)):
                 coinFlag = 1
-                #print("Coin not recognized / not parallel with camera.")
-                return 2, None
+                return 'Coin not recognized / not parallel with camera.', None
                 #exit(0)
             # compute the size of the object
             dimA = dA / pixelsPerMetric
@@ -232,4 +231,4 @@ def getRescaleFactor(imgPath, coinLength):
     #plt.show()
 
     cv2.imwrite(path, resized)
-    return 0, path
+    return 'Processed', path
