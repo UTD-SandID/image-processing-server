@@ -23,18 +23,18 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
         # Delete the file
         os.remove(image_path)
 
-@receiver(models.signals.pre_save, sender=SandImage)
-def auto_delete_file_on_change(sender, instance, **kwargs):
+#@receiver(models.signals.pre_save, sender=SandImage)
+#def auto_delete_file_on_change(sender, instance, **kwargs):
     """
     Deletes old iamge from media folder
     when corresponding `SandImage` object is updated
     with new file.
     """
-    if instance.pk:
+#    if instance.pk:
         # Retrieve the previous state of the model instance from the database
-        old_instance = sender.objects.get(pk=instance.pk)
+#        old_instance = sender.objects.get(pk=instance.pk)
         # Check if the image field has changed
-        if old_instance.image != instance.image:
+#        if old_instance.image != instance.image:
             # Delete the old image file if it exists
-            if old_instance.image:
-                os.remove(old_instance.image.path)
+#            if old_instance.image:
+#                os.remove(old_instance.image.path)

@@ -17,6 +17,7 @@ import sys
 from rembg import remove
 
 from django.conf import settings
+import os
 
 np.set_printoptions(threshold=sys.maxsize)
 
@@ -28,7 +29,7 @@ def rmbgJPG(path):
     input = Image.open(input_path)
     output = remove(input)
     rgb_im = output.convert('RGB')
-    img_path = settings.MEDIA_ROOT + str('/temp/result.jpg')
+    img_path = settings.MEDIA_ROOT + str('/rmbgJPG.jpg')
     rgb_im.save(img_path)
     return img_path
 '''
@@ -63,19 +64,18 @@ def whitepatch_balancing(image, from_row, from_column,
     '''
     #plt.imshow(image)
     #plt.show()
-    image_patch = image[from_row:from_row+row_width, 
-                        from_column:from_column+column_width]
-    image_max = (image*1.0 / 
-                 image_patch.max(axis=(0, 1))).clip(0, 1)
+    image_patch = image[from_row:from_row + row_width, from_column:from_column + column_width]
+    image_max = (image * 1.0 / image_patch.max(axis=(0, 1))).clip(0, 1)
     #plt.imshow(image_max);
     #plt.show()
     #print(type(image_max), " | ", image_max.shape)
     #print(type(image), " | ", image.shape)
-    
+    img_path = settings.MEDIA_ROOT + str('temp.jpg')
     image_max = image_max * 255
     image_max = image_max.astype('uint8')
     #cv2.convertScaleAbs(tempIMG, alpha=(255.0))
-    cv2.imwrite("temp" + ".jpg",image_max)
+    
+    cv2.imwrite(img_path ,image_max)
 
 def getRescaleFactor(imgPath, coinLength):
     irlLength = coinLength #diameter of physical coin
@@ -180,14 +180,14 @@ def getRescaleFactor(imgPath, coinLength):
                 #print(ppmDiff)
                 if ppmDiff > 1:
                     #print("Image too zoomed out / Resolution too low")
-                    return 'Image too zoomed out / Resolution too low.', None
+                    return 'Image too zoomed out / Resolution too low.'
                     #exit(0)
                 scaledDimX = math.ceil(w * ppmDiff)
                 scaledDimY = math.ceil(h * ppmDiff)
             #print("PPM: ", pixelsPerMetric)
             if (min(dA, dB) * (1+lengthErr)) < (max(dA, dB)):
                 coinFlag = 1
-                return 'Coin not recognized / not parallel with camera.', None
+                return 'Coin not recognized / not parallel with camera.'
                 #exit(0)
             # compute the size of the object
             dimA = dA / pixelsPerMetric
@@ -222,13 +222,13 @@ def getRescaleFactor(imgPath, coinLength):
         #cv2.imwrite(frame_name + "$" + str(round(pixelsPerMetric, 1)) + ".jpg",img)
 
     tempIMG = img
-    whitepatch_balancing(img, dimB, dimA, dimD, dimC)
+    #whitepatch_balancing(img, int(dimB), int(dimA), int(dimD), int(dimC))
     dim = (scaledDimX, scaledDimY)
     #print(dim)
-    tempIMG = cv2.imread("temp.jpg")
+    #tempIMG = cv2.imread(settings.MEDIA_ROOT + "/temp.jpg")
     resized = cv2.resize(tempIMG, dim, interpolation = cv2.INTER_AREA)
     #plt.imshow(resized.astype('uint8'))
     #plt.show()
 
     cv2.imwrite(path, resized)
-    return 'Processed', path
+    return 'Processed'

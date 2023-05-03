@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-u)idt&bid%pojf+va@1g!ncj-c)&bn$e+#4-nf4+o!(7%mwna)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['18.189.83.39']
+ALLOWED_HOSTS = ['192.168.1.182', '75.12.150.23']
 
 
 # Application definition
@@ -150,8 +150,8 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'utils.tasks.batch_upload',
         'schedule': 60.0,  # 5 minutes in seconds
     },
-    'process_images': {
-        'task': 'utils.tasks.process_image',
-        'schedule': 10.0,
+    'database_clean': {
+        'task': 'utils.tasks.batch_delete',
+        'schedule': 300.0,
     },
 }
