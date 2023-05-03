@@ -8,3 +8,4 @@ class SandImage(models.Model):
     longitude = models.FloatField()
     coin = models.FloatField()
     status = models.IntegerField(default=0)
+    
