@@ -6,4 +6,4 @@ from image_processing.models import SandImage
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = SandImage
-        fields = ('image', 'image_uri', 'latitude', 'longitude', 'coin', 'status', 'error')
+        fields = ('image', 'image_uri', 'latitude', 'longitude', 'coin', 'status', 'error', 'expiration')

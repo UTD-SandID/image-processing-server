@@ -15,6 +15,6 @@ class SandImage(models.Model):
     coin = models.FloatField()
     status = models.CharField(max_length=20, default='Pending')
     error = models.CharField(max_length=50, default='None')
-    created_at = models.DateTimeField(auto_now=True)
+    #created_at = models.DateTimeField(auto_now=True)
     expiration = models.DateTimeField(default=expiration)
     

@@ -29,7 +29,7 @@ def rmbgJPG(path):
     input = Image.open(input_path)
     output = remove(input)
     rgb_im = output.convert('RGB')
-    img_path = settings.MEDIA_ROOT + str('/rmbgJPG.jpg')
+    img_path = settings.MEDIA_ROOT + '/rmbgJPG-' + os.path.basename(path)
     rgb_im.save(img_path)
     return img_path
 '''
@@ -50,7 +50,7 @@ def cropBox(x, y, a, b, percent):
     return newX, newY, newA, newB
 
 def whitepatch_balancing(image, from_row, from_column, 
-                         row_width, column_width):
+                         row_width, column_width, image_name):
     '''
     fig, ax = plt.subplots(1,2, figsize=(10,5))
     ax[0].imshow(image)
@@ -64,13 +64,16 @@ def whitepatch_balancing(image, from_row, from_column,
     '''
     #plt.imshow(image)
     #plt.show()
+    #print(len(image), from_row, from_column, row_width, column_width)
     image_patch = image[from_row:from_row + row_width, from_column:from_column + column_width]
+    #print(len(image_patch))
+
     image_max = (image * 1.0 / image_patch.max(axis=(0, 1))).clip(0, 1)
     #plt.imshow(image_max);
     #plt.show()
     #print(type(image_max), " | ", image_max.shape)
     #print(type(image), " | ", image.shape)
-    img_path = settings.MEDIA_ROOT + str('temp.jpg')
+    img_path = settings.MEDIA_ROOT + '/temp-' + image_name
     image_max = image_max * 255
     image_max = image_max.astype('uint8')
     #cv2.convertScaleAbs(tempIMG, alpha=(255.0))
@@ -81,14 +84,15 @@ def getRescaleFactor(imgPath, coinLength):
     irlLength = coinLength #diameter of physical coin
     lengthErr = .1 #margin of error in diameters of ellipse before Bad Image Error
     path = imgPath
+    image_name = os.path.basename(imgPath)
 
     img = cv2.imread(path)
 
     h, w, c = img.shape
     if h < w:
         img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
-
-    bgr = cv2.imread(rmbgJPG(path))
+    rmbgJPG_path = rmbgJPG(path)
+    bgr = cv2.imread(rmbgJPG_path)
 
     h, w, c = bgr.shape
     if h < w:
@@ -120,6 +124,10 @@ def getRescaleFactor(imgPath, coinLength):
     # sort the contours from left-to-right and initialize the
     # 'pixels per metric' calibration variable
     (cnts, _) = contours.sort_contours(cnts)
+    if len(cnts) < 2:
+        os.remove(rmbgJPG_path)
+        return 'Missing coin or white balance reference'
+    #print('contours', len(cnts))
     pixelsPerMetric = None
     avgD = 0
     scaledDimX = None
@@ -179,6 +187,7 @@ def getRescaleFactor(imgPath, coinLength):
                 ppmDiff = 750 / pixelsPerMetric
                 #print(ppmDiff)
                 if ppmDiff > 1:
+                    os.remove(rmbgJPG_path)
                     #print("Image too zoomed out / Resolution too low")
                     return 'Image too zoomed out / Resolution too low.'
                     #exit(0)
@@ -187,6 +196,7 @@ def getRescaleFactor(imgPath, coinLength):
             #print("PPM: ", pixelsPerMetric)
             if (min(dA, dB) * (1+lengthErr)) < (max(dA, dB)):
                 coinFlag = 1
+                os.remove(rmbgJPG_path)
                 return 'Coin not recognized / not parallel with camera.'
                 #exit(0)
             # compute the size of the object
@@ -222,11 +232,17 @@ def getRescaleFactor(imgPath, coinLength):
         #cv2.imwrite(frame_name + "$" + str(round(pixelsPerMetric, 1)) + ".jpg",img)
 
     tempIMG = img
-    #whitepatch_balancing(img, int(dimB), int(dimA), int(dimD), int(dimC))
+    whitepatch_balancing(img, dimB, dimA, dimD, dimC, image_name)
     dim = (scaledDimX, scaledDimY)
     #print(dim)
-    #tempIMG = cv2.imread(settings.MEDIA_ROOT + "/temp.jpg")
+    tempIMG_path = settings.MEDIA_ROOT + '/temp-' + image_name
+    tempIMG = cv2.imread(tempIMG_path)
+
     resized = cv2.resize(tempIMG, dim, interpolation = cv2.INTER_AREA)
+
+    os.remove(tempIMG_path)
+    os.remove(rmbgJPG_path)
+    
     #plt.imshow(resized.astype('uint8'))
     #plt.show()
 

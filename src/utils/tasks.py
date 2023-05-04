@@ -59,14 +59,16 @@ def batch_upload():
         firebase_image_upload(image_path)
         setattr(entry, 'status', 'Uploaded')
         entry.save()
-    msg = str(len(entries)) + ' Processed images Uploaded to Firebase'
+    msg = str(len(entries)) + ' processed images Uploaded to Firebase'
     return msg
 
 
 @shared_task()
 def batch_delete():
     entries = SandImage.objects.all()
+    num_deleted = 0
     for entry in entries:
         if entry.expiration < timezone.now():
             entry.delete()
-    return str(len(entries)) + ' deleted from database'
+            num_deleted += 1
+    return str(num_deleted) + ' entries removed from database'
