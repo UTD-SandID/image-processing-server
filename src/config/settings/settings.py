@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-u)idt&bid%pojf+va@1g!ncj-c)&bn$e+#4-nf4+o!(7%mwna)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['3.144.191.114']
+ALLOWED_HOSTS = ['192.168.1.182', '75.12.150.23']
 
 
 # Application definition
@@ -146,8 +146,12 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_BEAT_SCHEDULE = {
-    'run-every-5-minutes': {
+    'firebase_upload': {
         'task': 'utils.tasks.batch_upload',
         'schedule': 60.0,  # 5 minutes in seconds
+    },
+    'database_clean': {
+        'task': 'utils.tasks.batch_delete',
+        'schedule': 300.0,
     },
 }
