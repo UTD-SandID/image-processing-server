@@ -6,6 +6,7 @@ Server for sand image processing.
 - WSGI configuration if using different WSGI server
 - Configuration related to chosen production environment
 
+## TEST
 
 ### Linux Installtion of Server Files
 May require knowledge of pip and apt-get to ensure dependencies are met.
